@@ -1,8 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import VideoLayout from '../../../../modules/UI/videolayout/VideoLayout';
+import DocumentPiP from '../../always-on-top/document-pip';
 import { VIDEO_TYPE } from '../../base/media';
 import { getLocalParticipant } from '../../base/participants';
 import { Watermarks } from '../../base/react';
@@ -138,6 +140,11 @@ class LargeVideo extends Component<Props> {
         this._clearTapTimeout = this._clearTapTimeout.bind(this);
         this._onDoubleTap = this._onDoubleTap.bind(this);
         this._updateLayout = this._updateLayout.bind(this);
+        this._closePiP = this._closePiP.bind(this);
+        this._showPiP = this._showPiP.bind(this);
+
+        window.addEventListener('focus', this._closePiP);
+        window.addEventListener('blur', this._showPiP);
     }
 
     /**
@@ -225,6 +232,40 @@ class LargeVideo extends Component<Props> {
                 {_showDominantSpeakerBadge && <StageParticipantNameLabel />}
             </div>
         );
+    }
+
+    /**
+     * Shows the picture in picture window.
+     *
+     * @returns {void}
+     */
+    async _showPiP() {
+        if (this._pipSession || !navigator.documentPictureInPicture) {
+            return;
+        }
+
+        try {
+            this._pipSession = await navigator.documentPictureInPicture.requestWindow({
+                copyStyleSheets: true,
+                initialAspectRatio: 16 / 9,
+                lockAspectRatio: true
+            });
+            this._pipSession.window.onunload = this._closePiP;
+            this._pipSession.window.document.body.style = 'margin: 0; background-color: #000';
+            ReactDOM.render(<DocumentPiP />, this._pipSession.window.document.body);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    /** .....................
+     * Closes the picture in picture window.
+     *
+     * @returns {void}
+     */
+    _closePiP() {
+        this._pipSession?.window.close();
+        this._pipSession = undefined;
     }
 
     _updateLayout: () => void;
