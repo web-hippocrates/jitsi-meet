@@ -55,6 +55,7 @@ export interface ITrack {
         timeout?: number;
         uid?: string;
     };
+    orphaned: boolean;
     participantId: string;
     streamingStatus?: string;
     videoStarted: boolean;

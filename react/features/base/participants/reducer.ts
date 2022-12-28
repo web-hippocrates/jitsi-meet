@@ -10,6 +10,7 @@ import {
     PARTICIPANT_ID_CHANGED,
     PARTICIPANT_JOINED,
     PARTICIPANT_LEFT,
+    PARTICIPANT_SOURCES_UPDATED,
     PARTICIPANT_UPDATED,
     PIN_PARTICIPANT,
     RAISE_HAND_UPDATED,
@@ -379,6 +380,16 @@ ReducerRegistry.register<IParticipantsState>('features/base/participants',
 
         return { ...state };
     }
+    case PARTICIPANT_SOURCES_UPDATED: {
+        const { id, sources } = action;
+        const participant = state.remote.get(id);
+
+        if (participant) {
+            participant.sources = sources;
+        }
+
+        return { ...state };
+    }
     case RAISE_HAND_UPDATED: {
         return {
             ...state,
@@ -521,7 +532,8 @@ function _participantJoined({ participant }: { participant: IParticipant; }) {
         name,
         pinned,
         presence,
-        role
+        role,
+        sources
     } = participant;
     let { conference, id } = participant;
 
@@ -551,7 +563,8 @@ function _participantJoined({ participant }: { participant: IParticipant; }) {
         name,
         pinned: pinned || false,
         presence,
-        role: role || PARTICIPANT_ROLE.NONE
+        role: role || PARTICIPANT_ROLE.NONE,
+        sources
     };
 }
 
