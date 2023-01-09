@@ -712,6 +712,8 @@ class Toolbox extends Component<IProps> {
             _isMobile,
             _isSpeakerStatsDisabled,
             _multiStreamModeEnabled,
+            _overflowDrawer,
+            _reactionsEnabled,
             _screenSharing,
             _whiteboardEnabled
         } = this.props;
@@ -748,7 +750,7 @@ class Toolbox extends Component<IProps> {
             group: 2
         };
 
-        const raisehand = {
+        const raisehand = (!_reactionsEnabled || (!_overflowDrawer && !_isMobile)) && {
             key: 'raisehand',
             Content: ReactionsMenuButton,
             handleClick: this._onToolbarToggleRaiseHand,
@@ -1396,7 +1398,7 @@ class Toolbox extends Component<IProps> {
         } = this.props;
 
         const toolbarAccLabel = 'toolbar.accessibilityLabel.moreActionsMenu';
-        const containerClassName = `toolbox-content${_isMobile ? ' toolbox-content-mobile' : ''}`;
+        const containerClassName = `toolbox-content${_isMobile || _overflowDrawer ? ' toolbox-content-mobile' : ''}`;
 
         const { mainMenuButtons, overflowMenuButtons } = this._getVisibleButtons();
 
@@ -1424,7 +1426,7 @@ class Toolbox extends Component<IProps> {
                                 key = 'overflow-menu'
                                 onVisibilityChange = { this._onSetOverflowVisible }
                                 showMobileReactions = {
-                                    _reactionsEnabled && overflowMenuButtons.find(({ key }) => key === 'raisehand')
+                                    _reactionsEnabled && (_isMobile || _overflowDrawer)
                                 }>
                                 <ContextMenu
                                     accessibilityLabel = { t(toolbarAccLabel) }

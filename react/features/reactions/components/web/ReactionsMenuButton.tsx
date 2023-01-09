@@ -135,10 +135,12 @@ function ReactionsMenuButton({
  * @returns {Object}
  */
 function mapStateToProps(state: IReduxState) {
+    const { overflowDrawer } = state['features/toolbox'];
+
     return {
         _reactionsEnabled: isReactionsEnabled(state),
         isOpen: getReactionsMenuVisibility(state),
-        isMobile: isMobileBrowser(),
+        isMobile: isMobileBrowser() || overflowDrawer,
         reactionsQueue: getReactionsQueue(state)
     };
 }

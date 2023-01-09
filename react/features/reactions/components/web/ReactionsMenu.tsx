@@ -236,10 +236,11 @@ class ReactionsMenu extends Component<IProps> {
  */
 function mapStateToProps(state: IReduxState) {
     const localParticipant = getLocalParticipant(state);
+    const { overflowDrawer } = state['features/toolbox'];
 
     return {
         _localParticipantID: localParticipant?.id,
-        _isMobile: isMobileBrowser(),
+        _isMobile: isMobileBrowser() || overflowDrawer,
         _isGifEnabled: isGifEnabled(state),
         _isGifMenuVisible: isGifsMenuOpen(state),
         _raisedHand: hasRaisedHand(localParticipant)

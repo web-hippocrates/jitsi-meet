@@ -136,9 +136,7 @@ StateListenerRegistry.register(
 StateListenerRegistry.register(
     /* selector */ state => state['features/base/responsive-ui'].clientWidth < DISPLAY_DRAWER_THRESHOLD,
     /* listener */ (widthBelowThreshold, store) => {
-        if (isMobileBrowser()) {
-            store.dispatch(setOverflowDrawer(widthBelowThreshold));
-        }
+        store.dispatch(setOverflowDrawer(widthBelowThreshold));
     });
 
 /**

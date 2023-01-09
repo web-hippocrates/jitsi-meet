@@ -170,13 +170,14 @@ class VideoSettingsButton extends Component<Props> {
  */
 function mapStateToProps(state) {
     const { permissions = {} } = state['features/base/devices'];
+    const { overflowDrawer } = state['features/toolbox'];
 
     return {
         hasPermissions: permissions.video,
         hasVideoTrack: Boolean(getLocalJitsiVideoTrack(state)),
         isDisabled: isVideoSettingsButtonDisabled(state),
         isOpen: getVideoSettingsVisibility(state),
-        visible: !isMobileBrowser()
+        visible: !isMobileBrowser() && !overflowDrawer
     };
 }
 
