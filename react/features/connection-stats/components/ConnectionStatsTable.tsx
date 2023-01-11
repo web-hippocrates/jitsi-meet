@@ -263,7 +263,7 @@ class ConnectionStatsTable extends Component<IProps> {
             isVirtualScreenshareParticipant,
             isLocalVideo
         } = this.props;
-        const className = clsx(classes.connectionStatsTable, { [classes.mobile]: isMobileBrowser() });
+        const className = clsx(classes.connectionStatsTable, classes.mobile);
 
         if (isVirtualScreenshareParticipant) {
             return this._renderScreenShareStatus();
